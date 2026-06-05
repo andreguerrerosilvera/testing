@@ -1,0 +1,1748 @@
+<!doctype html>
+<html lang="es-CO">
+
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+  <title>Blopy — Juegos de mesa a domicilio en Medellín</title>
+  <!-- Marca el documento como "con JS" antes de pintar, para evitar parpadeos en las animaciones -->
+  <script>document.documentElement.classList.add('js-anim');</script>
+
+  <!-- ===================================================================
+     FUENTES — Sistema CHUNKY-POP
+     Bricolage Grotesque · 700 italic  → display / titulares
+     Manrope · 500                     → cuerpo
+     JetBrains Mono                    → etiquetas, precios, micro-texto
+     =================================================================== -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ===================================================================
+   TOKENS — Design System v1 · CHUNKY-POP
+   =================================================================== */
+    :root {
+      /* --- Surface --- */
+      --ink: #0E0E10;
+      /* page */
+      --paper: #FFFFFF;
+      /* texto / outline */
+      /* --- Accents --- */
+      --hot: #FF30BB;
+      /* primary CTA */
+      --lime: #C8DC52;
+      /* sticker / callout */
+      --grape: #986FE8;
+      /* chip / mascota */
+      --cheek: #FF6BAA;
+      /* blush */
+      /* --- Derivados de superficie --- */
+      --ink-card: #161619;
+      /* tarjetas */
+      --ink-card2: #1D1D21;
+      /* tarjetas elevadas / hover */
+      --paper-72: rgba(255, 255, 255, .72);
+      /* texto secundario */
+      --paper-52: rgba(255, 255, 255, .52);
+      /* texto terciario */
+      --line: rgba(255, 255, 255, .14);
+      /* bordes sutiles */
+      --line-2: rgba(255, 255, 255, .26);
+      /* bordes marcados */
+      /* --- Radii (chunky) --- */
+      --r1: 16px;
+      --r2: 24px;
+      --r3: 36px;
+      --r4: 44px;
+      --pill: 999px;
+      /* --- Sombra (glow oscuro) --- */
+      --shadow: 0 18px 50px rgba(0, 0, 0, .45);
+      --shadow-sm: 0 8px 22px rgba(0, 0, 0, .35);
+      /* --- Tipografía --- */
+      --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --font-body: 'Manrope', system-ui, sans-serif;
+      /* --- Espaciado --- */
+      --s1: 4px;
+      --s2: 8px;
+      --s3: 12px;
+      --s4: 16px;
+      --s5: 24px;
+      --s6: 32px;
+      --s7: 48px;
+      --s8: 64px;
+      --s9: 96px;
+      --maxw: 1120px;
+    }
+
+    /* ===================================================================
+   BASE
+   =================================================================== */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    /* Display SIEMPRE en itálica (firma del sistema) */
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.0;
+      letter-spacing: -.02em;
+      margin: 0;
+      text-wrap: balance;
+    }
+
+    h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: italic;
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      text-wrap: pretty;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hot {
+      color: var(--hot);
+    }
+
+    .lime {
+      color: var(--lime);
+    }
+
+    .grape {
+      color: var(--grape);
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding-inline: var(--s5);
+    }
+
+    /* Etiqueta mono (eyebrow) */
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--paper-52);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s2);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 18px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--lime);
+      display: inline-block;
+    }
+
+    /* ---- Botones chunky ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-weight: 800;
+      font-size: 16px;
+      padding: 15px 26px;
+      border-radius: var(--pill);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease, color .16s ease;
+      white-space: nowrap;
+    }
+
+    .btn--hot {
+      background: var(--hot);
+      color: var(--paper);
+    }
+
+    .btn--hot:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(255, 48, 187, .4);
+    }
+
+    .btn--lime {
+      background: var(--lime);
+      color: var(--ink);
+    }
+
+    .btn--lime:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(200, 220, 82, .35);
+    }
+
+    .btn--paper {
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .btn--paper:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--paper);
+      border-color: var(--line-2);
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--paper);
+      transform: translateY(-2px);
+    }
+
+    .btn .wa {
+      width: 19px;
+      height: 19px;
+      flex: none;
+    }
+
+    /* Secciones */
+    section {
+      padding-block: var(--s9);
+    }
+
+    .section-head {
+      max-width: 660px;
+      margin-bottom: var(--s7);
+    }
+
+    .section-head h2 {
+      font-size: clamp(32px, 4.6vw, 54px);
+      margin-top: var(--s4);
+    }
+
+    .section-head p {
+      color: var(--paper-72);
+      font-size: 19px;
+      margin-top: var(--s4);
+      font-style: normal;
+    }
+
+    /* Aparición al hacer scroll (oculto solo si hay JS) */
+    .js-anim .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .js-anim .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ===================================================================
+   HEADER / NAV
+   =================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--ink) 80%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .site-header.is-stuck {
+      border-color: var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 74px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-style: italic;
+      font-size: 26px;
+      letter-spacing: -.04em;
+    }
+
+    .brand .dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--hot);
+      display: inline-block;
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--hot) 26%, transparent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--s6);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--paper-72);
+      transition: color .15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--paper);
+    }
+
+    .nav-cta .btn {
+      padding: 11px 20px;
+      font-size: 14.5px;
+    }
+
+    @media (max-width: 880px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    /* ===================================================================
+   HERO
+   =================================================================== */
+    .hero {
+      padding-top: var(--s8);
+      padding-bottom: var(--s9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* resplandor cheek/grape detrás del hero */
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -160px;
+      right: -120px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--cheek) 26%, transparent), transparent 62%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: var(--s8);
+      align-items: center;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: clamp(44px, 7vw, 80px);
+      font-weight: 800;
+      line-height: 1.04;
+      margin-top: var(--s5);
+    }
+
+    .hero-sub {
+      font-size: 20px;
+      color: var(--paper-72);
+      margin-top: var(--s6);
+      max-width: 34ch;
+      font-style: normal;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s3);
+      margin-top: var(--s7);
+    }
+
+    .hero-proof {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: var(--s6);
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      color: var(--paper-72);
+      background: var(--ink-card);
+      border: 1px solid var(--line);
+      padding: 11px 17px;
+      border-radius: var(--pill);
+    }
+
+    .hero-proof b {
+      color: var(--paper);
+      font-weight: 600;
+    }
+
+    .hero-proof .strike {
+      text-decoration: line-through;
+      color: var(--paper-52);
+    }
+
+    .hero-proof .ok {
+      color: var(--lime);
+    }
+
+    /* Pila de "cajas" — solo color + tipografía, sin imágenes */
+    .box-stack {
+      position: relative;
+      height: 470px;
+      --spread: 86px;
+    }
+
+    .box {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 256px;
+      height: 332px;
+      border-radius: var(--r3);
+      padding: 24px;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      border: 2px solid rgba(0, 0, 0, .12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform .7s cubic-bezier(.22, .61, .36, 1), filter .5s ease;
+    }
+
+    .box .tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity: .72;
+    }
+
+    .box .ttl {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-style: italic;
+      font-size: 34px;
+      line-height: .92;
+      letter-spacing: -.03em;
+    }
+
+    .box .meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      opacity: .68;
+    }
+
+    .box .pips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .box .pips i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .55);
+    }
+
+    /* Colores fijos por carta */
+    .box-1 {
+      background: var(--grape);
+    }
+
+    .box-2 {
+      background: var(--lime);
+    }
+
+    .box-3 {
+      background: var(--hot);
+    }
+
+    /* Posiciones del carrusel (JS las rota cada pocos segundos) */
+    .box.pos-front {
+      transform: translate(-50%, -50%) rotate(-1deg) translateY(-14px) scale(1.04);
+      z-index: 3;
+      filter: none;
+    }
+
+    .box.pos-left {
+      transform: translate(-50%, -50%) rotate(-9deg) translateX(calc(-1 * var(--spread))) translateY(16px);
+      z-index: 1;
+      filter: brightness(.78);
+    }
+
+    .box.pos-right {
+      transform: translate(-50%, -50%) rotate(8deg) translateX(var(--spread)) translateY(30px);
+      z-index: 1;
+      filter: brightness(.78);
+    }
+
+    /* Fallback sin JS: abanico estático con las tres visibles */
+    .box-stack:not(.js-carousel) .box-1 {
+      transform: translate(-50%, -50%) rotate(-9deg) translateX(calc(-1 * var(--spread))) translateY(16px);
+      z-index: 1;
+    }
+
+    .box-stack:not(.js-carousel) .box-2 {
+      transform: translate(-50%, -50%) rotate(8deg) translateX(var(--spread)) translateY(30px);
+      z-index: 1;
+    }
+
+    .box-stack:not(.js-carousel) .box-3 {
+      transform: translate(-50%, -50%) rotate(-1deg) translateY(-12px);
+      z-index: 3;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: var(--s7);
+      }
+
+      .box-stack {
+        height: 390px;
+        order: -1;
+        --spread: 64px;
+      }
+
+      .box {
+        width: 214px;
+        height: 278px;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .box-stack {
+        height: 340px;
+        --spread: 56px;
+      }
+    }
+
+    /* ===================================================================
+   CÓMO FUNCIONA
+   =================================================================== */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s5);
+    }
+
+    .step {
+      background: var(--ink-card);
+      border: 1px solid var(--line);
+      border-radius: var(--r3);
+      padding: var(--s6);
+    }
+
+    .step .num {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--lime);
+      display: inline-block;
+      padding: 3px 11px;
+      border-radius: var(--pill);
+      letter-spacing: .06em;
+    }
+
+    .step h3 {
+      font-size: 26px;
+      margin-top: var(--s5);
+    }
+
+    .step p {
+      color: var(--paper-72);
+      margin-top: var(--s3);
+      font-size: 17px;
+      font-style: normal;
+    }
+
+    @media (max-width: 780px) {
+      .steps {
+        grid-template-columns: 1fr;
+        gap: var(--s4);
+      }
+    }
+
+    /* ===================================================================
+   PLANES
+   =================================================================== */
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s5);
+      align-items: stretch;
+    }
+
+    .plan {
+      position: relative;
+      background: var(--ink-card);
+      border: 2px solid var(--line);
+      border-radius: var(--r3);
+      padding: var(--s6);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .plan:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+      border-color: var(--line-2);
+    }
+
+    .plan.is-selected {
+      border-color: var(--paper);
+    }
+
+    .plan[data-tier="social"] {
+      --tier: var(--grape);
+    }
+
+    .plan[data-tier="explorador"] {
+      --tier: var(--hot);
+    }
+
+    .plan[data-tier="jugador"] {
+      --tier: var(--lime);
+    }
+
+    .plan.is-popular {
+      background: var(--ink-card2);
+      border-color: var(--hot);
+      transform: translateY(-12px);
+      box-shadow: 0 24px 60px rgba(255, 48, 187, .18);
+    }
+
+    .plan.is-popular:hover {
+      transform: translateY(-16px);
+    }
+
+    /* sticker chunky, rotado */
+    .plan .pop-badge {
+      position: absolute;
+      top: -16px;
+      right: 18px;
+      transform: rotate(4deg);
+      background: var(--lime);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      border-radius: var(--pill);
+      white-space: nowrap;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .plan .tier-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .plan .tier-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      background: var(--tier);
+      transform: rotate(45deg);
+    }
+
+    .plan .tier-name {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--tier);
+    }
+
+    .plan h3 {
+      font-size: 28px;
+      margin-top: var(--s4);
+    }
+
+    .plan .price {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: var(--s4);
+    }
+
+    .plan .price .num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-style: italic;
+      font-size: 46px;
+      letter-spacing: -.03em;
+    }
+
+    .plan .price .per {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--paper-52);
+    }
+
+    .plan .desc {
+      color: var(--paper-72);
+      font-size: 16px;
+      margin-top: var(--s4);
+      font-style: normal;
+    }
+
+    .plan .feats {
+      list-style: none;
+      margin: var(--s5) 0 var(--s6);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s3);
+      flex: 1;
+    }
+
+    .plan .feats li {
+      display: flex;
+      gap: 11px;
+      font-size: 15.5px;
+      line-height: 1.45;
+    }
+
+    .plan .feats li::before {
+      content: "";
+      flex: none;
+      margin-top: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--tier);
+    }
+
+    .plan .feats li .games {
+      color: var(--paper-52);
+    }
+
+    .plan .btn {
+      width: 100%;
+    }
+
+    @media (max-width: 920px) {
+      .plans {
+        grid-template-columns: 1fr;
+        gap: var(--s6);
+      }
+
+      .plan.is-popular {
+        transform: none;
+      }
+
+      .plan.is-popular:hover {
+        transform: translateY(-5px);
+      }
+    }
+
+    /* ===================================================================
+   CATÁLOGO
+   =================================================================== */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s4);
+    }
+
+    .game {
+      background: var(--ink-card);
+      border: 1px solid var(--line);
+      border-radius: var(--r2);
+      padding: var(--s5);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+      border-top: 5px solid var(--gc);
+    }
+
+    .game:hover {
+      transform: translateY(-4px);
+      border-color: var(--line-2);
+      background: var(--ink-card2);
+    }
+
+    .game[data-tier="social"] {
+      --gc: var(--grape);
+    }
+
+    .game[data-tier="explorador"] {
+      --gc: var(--hot);
+    }
+
+    .game[data-tier="jugador"] {
+      --gc: var(--lime);
+    }
+
+    .game .gtag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gc);
+    }
+
+    .game h3 {
+      font-size: 27px;
+      margin-top: var(--s3);
+    }
+
+    .game p {
+      color: var(--paper-72);
+      font-size: 15.5px;
+      margin-top: var(--s2);
+      font-style: normal;
+    }
+
+    @media (max-width: 840px) {
+      .cat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .cat-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===================================================================
+   POR QUÉ BLOPY
+   =================================================================== */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s5);
+    }
+
+    .reason {
+      display: flex;
+      gap: var(--s4);
+      background: var(--ink-card);
+      border: 1px solid var(--line);
+      border-radius: var(--r2);
+      padding: var(--s5) var(--s6);
+    }
+
+    .reason .mark {
+      flex: none;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r1);
+      background: var(--grape);
+      display: grid;
+      place-items: center;
+    }
+
+    .reason .mark span {
+      width: 13px;
+      height: 13px;
+      border-radius: 4px;
+      background: var(--ink);
+      transform: rotate(45deg);
+    }
+
+    .reason:nth-child(2) .mark {
+      background: var(--hot);
+    }
+
+    .reason:nth-child(3) .mark {
+      background: var(--lime);
+    }
+
+    .reason:nth-child(4) .mark {
+      background: var(--cheek);
+    }
+
+    .reason h3 {
+      font-size: 21px;
+    }
+
+    .reason p {
+      color: var(--paper-72);
+      font-size: 16px;
+      margin-top: 6px;
+      font-style: normal;
+    }
+
+    @media (max-width: 720px) {
+      .why-grid {
+        grid-template-columns: 1fr;
+        gap: var(--s4);
+      }
+    }
+
+    /* ===================================================================
+   ZONA DE COBERTURA
+   =================================================================== */
+    .zone {
+      background: var(--grape);
+      color: var(--ink);
+      border-radius: var(--r4);
+      padding: var(--s8);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s7);
+      align-items: center;
+    }
+
+    .zone h2 {
+      color: var(--paper);
+      font-size: clamp(30px, 4.4vw, 48px);
+    }
+
+    .zone .eyebrow {
+      color: rgba(14, 14, 16, .62);
+    }
+
+    .zone .eyebrow::before {
+      background: var(--ink);
+    }
+
+    .zone p {
+      color: var(--paper);
+      margin-top: var(--s4);
+      font-size: 18px;
+      font-style: normal;
+    }
+
+    .barrios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .barrio {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 10px 16px;
+      border-radius: var(--pill);
+      background: var(--lime);
+      color: var(--ink);
+    }
+
+    .barrio.more {
+      background: var(--hot);
+      border: 1.5px dashed rgba(14, 14, 16, .4);
+      color: var(--paper);
+    }
+
+    @media (max-width: 780px) {
+      .zone {
+        grid-template-columns: 1fr;
+        padding: var(--s7);
+        gap: var(--s6);
+      }
+    }
+
+    /* ===================================================================
+   FAQ
+   =================================================================== */
+    .faq-list {
+      max-width: 840px;
+      border-top: 1px solid var(--line);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s4);
+      padding: var(--s5) 0;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: italic;
+      font-size: clamp(19px, 2.4vw, 25px);
+      color: var(--paper);
+    }
+
+    .faq-q .ico {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--ink-card2);
+      position: relative;
+      transition: background .2s ease;
+    }
+
+    .faq-q:hover .ico {
+      background: var(--hot);
+    }
+
+    .faq-q .ico::before,
+    .faq-q .ico::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      background: var(--paper);
+    }
+
+    .faq-q:hover .ico::before,
+    .faq-q:hover .ico::after {
+      background: var(--ink);
+    }
+
+    .faq-q .ico::before {
+      width: 13px;
+      height: 2.5px;
+      border-radius: 2px;
+    }
+
+    .faq-q .ico::after {
+      width: 2.5px;
+      height: 13px;
+      border-radius: 2px;
+      transition: transform .25s ease;
+    }
+
+    .faq-item.open .faq-q .ico {
+      background: var(--lime);
+    }
+
+    .faq-item.open .faq-q .ico::before,
+    .faq-item.open .faq-q .ico::after {
+      background: var(--ink);
+    }
+
+    .faq-item.open .faq-q .ico::after {
+      transform: scaleY(0);
+    }
+
+    .faq-a {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .3s ease;
+    }
+
+    .faq-a p {
+      color: var(--paper-72);
+      font-size: 17px;
+      padding-bottom: var(--s5);
+      max-width: 66ch;
+      font-style: normal;
+    }
+
+    /* ===================================================================
+   CTA FINAL
+   =================================================================== */
+    .final-card {
+      background: var(--lime);
+      color: var(--ink);
+      border-radius: var(--r4);
+      padding: var(--s9) var(--s6);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(rgba(14, 14, 16, .08) 2px, transparent 2.4px);
+      background-size: 30px 30px;
+      opacity: .7;
+    }
+
+    .final-card>* {
+      position: relative;
+    }
+
+    .final-card .eyebrow {
+      color: rgba(14, 14, 16, .6);
+      justify-content: center;
+    }
+
+    .final-card .eyebrow::before {
+      background: var(--hot);
+    }
+
+    .final-card h2 {
+      color: var(--ink);
+      font-size: clamp(34px, 5.4vw, 62px);
+      font-weight: 800;
+      margin-top: var(--s4);
+      line-height: 1.02;
+    }
+
+    .final-card p {
+      color: rgba(14, 14, 16, .78);
+      font-size: 19px;
+      margin: var(--s4) auto 0;
+      max-width: 48ch;
+      font-style: normal;
+    }
+
+    .final-card .btn {
+      margin-top: var(--s7);
+      padding: 17px 32px;
+      font-size: 17px;
+    }
+
+    .final-card .fine {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      margin-top: var(--s4);
+      color: rgba(14, 14, 16, .6);
+    }
+
+    /* ===================================================================
+   FOOTER
+   =================================================================== */
+    .site-footer {
+      padding-block: var(--s7);
+      border-top: 1px solid var(--line);
+    }
+
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s4);
+      flex-wrap: wrap;
+    }
+
+    .foot .brand {
+      font-size: 22px;
+    }
+
+    .foot .meta {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--paper-52);
+    }
+
+    .foot .links {
+      display: flex;
+      gap: var(--s5);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 14px;
+    }
+
+    .foot .links a {
+      color: var(--paper-72);
+      font-weight: 600;
+    }
+
+    .foot .links a:hover {
+      color: var(--paper);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js-anim .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===================================================================
+     HEADER
+     =================================================================== -->
+  <header
+    class="site-header"
+    id="header"
+  >
+    <div class="wrap nav">
+      <a
+        class="brand"
+        href="#top"
+      ><span class="dot"></span>Blopy</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#como">Cómo funciona</a></li>
+          <li><a href="#planes">Planes</a></li>
+          <li><a href="#catalogo">Catálogo</a></li>
+          <li><a href="#faq">Preguntas</a></li>
+        </ul>
+      </nav>
+      <div class="nav-cta">
+        <a
+          class="btn btn--hot"
+          href="https://wa.me/57XXXXXXXXXX?text=Hola%20Blopy%2C%20quiero%20suscribirme"
+          target="_blank"
+          rel="noopener"
+        >Suscribirme</a>
+      </div>
+    </div>
+  </header>
+
+  <a id="top"></a>
+
+  <!-- ===================================================================
+     1 · HERO
+     =================================================================== -->
+  <section
+    class="hero"
+    id="inicio"
+  >
+    <div class="wrap hero-grid">
+      <div class="hero-copy reveal">
+        <span class="eyebrow">Juegos de mesa · A domicilio · Medellín</span>
+        <h1>Más juegos, menos <span class="hot">gastos</span>.</h1>
+        <p class="hero-sub">Ark Nova, Wingspan, Flamecraft y más — los llevamos a tu casa por una suscripción mensual.
+          Juega algo diferente cada mes sin llenar tus estanterías.</p>
+        <div class="hero-actions">
+          <a
+            class="btn btn--hot"
+            href="#planes"
+          >Ver planes</a>
+          <a
+            class="btn btn--ghost"
+            href="#como"
+          >Cómo funciona</a>
+        </div>
+        <div class="hero-proof">
+          Ark Nova: <b class="strike">$350.000</b> → con Blopy <b class="ok">$120.000/mes</b>. Haz el math.
+        </div>
+      </div>
+
+      <!-- Pila de cajas: solo color + tipografía, sin imágenes -->
+      <div
+        class="box-stack reveal"
+        aria-hidden="true"
+      >
+        <div class="box box-1">
+          <div class="tag">Plan Social</div>
+          <div class="ttl">Dixit</div>
+          <div class="pips"><i></i><i></i><i></i></div>
+          <div class="meta">3–6 jugadores · 30 min</div>
+        </div>
+        <div class="box box-2">
+          <div class="tag">Plan Estratega</div>
+          <div class="ttl">Ark<br>Nova</div>
+          <div class="pips"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="meta">1–4 jugadores · 90–150 min</div>
+        </div>
+        <div class="box box-3">
+          <div class="tag">Plan Explorador</div>
+          <div class="ttl">Flame<br>craft</div>
+          <div class="pips"><i></i><i></i><i></i></div>
+          <div class="meta">1–5 jugadores · 60 min</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     2 · CÓMO FUNCIONA
+     =================================================================== -->
+  <section id="como">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>Tres pasos. Cero complicación.</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="num">01</span>
+          <h3>Eliges tu plan</h3>
+          <p>Social, Explorador o Estratega. Pagas un mes, sin amarres.</p>
+        </div>
+        <div class="step reveal">
+          <span class="num">02</span>
+          <h3>Te llevamos los juegos</h3>
+          <p>Pides del catálogo y los dejamos en tu puerta. Entrega y retiro incluidos.</p>
+        </div>
+        <div class="step reveal">
+          <span class="num">03</span>
+          <h3>Juegas y devuelves</h3>
+          <p>Al terminar el mes, tú eliges: conservar el mismo juego o recibir otro.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     3 · PLANES
+     =================================================================== -->
+  <section id="planes">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Los planes</span>
+        <h2>Elige cuánto quieres <span class="hot">jugar</span>.</h2>
+        <p>Todos incluyen entrega y retiro a domicilio dentro de la zona de cobertura.</p>
+      </div>
+
+      <div class="plans">
+        <!-- SOCIAL -->
+        <article
+          class="plan reveal"
+          data-tier="social"
+          data-plan="Social"
+        >
+          <div class="tier-row"><span class="tier-dot"></span><span class="tier-name">Social</span></div>
+          <h3>Para romper el hielo</h3>
+          <div class="price"><span class="num">$65.000</span><span class="per">/mes</span></div>
+          <p class="desc">Hasta 3 juegos party o para 2 jugadores.</p>
+          <ul class="feats">
+            <li>Perfectos para jugar con cualquiera, sin experiencia previa</li>
+            <li>Funciona desde parejas hasta grupos de 10+</li>
+            <li class="games"><span>Love Letter, Hombre Lobo, Exploding Kittens y más</span></li>
+            <li>Entrega y retiro a domicilio</li>
+          </ul>
+          <a
+            class="btn btn--paper"
+            href="https://wa.me/57XXXXXXXXXX?text=Hola%20Blopy%2C%20quiero%20el%20plan%20Social"
+            target="_blank"
+            rel="noopener"
+          >Elegir Social</a>
+        </article>
+
+        <!-- EXPLORADOR (popular) -->
+        <article
+          class="plan is-popular reveal"
+          data-tier="explorador"
+          data-plan="Explorador"
+        > <span class="pop-badge">★ El más pedido</span>
+          <div class="tier-row"><span class="tier-dot"></span><span class="tier-name">Explorador</span></div>
+          <h3>Donde empieza la aventura</h3>
+          <div class="price"><span class="num">$85.000</span><span class="per">/mes</span></div>
+          <p class="desc">Hasta 2 juegos del catálogo Explorador.</p>
+          <ul class="feats">
+            <li>Los títulos más queridos por la comunidad</li>
+            <li>Prueba un título nuevo cada quincena sin comprarlo</li>
+            <li class="games"><span>Wingspan, Flamecraft, Catan, Azul, Pandemic…</span></li>
+            <li>Entrega y retiro a domicilio</li>
+          </ul>
+          <a
+            class="btn btn--hot"
+            href="https://wa.me/57XXXXXXXXXX?text=Hola%20Blopy%2C%20quiero%20el%20plan%20Explorador"
+            target="_blank"
+            rel="noopener"
+          >Elegir Explorador</a>
+        </article>
+
+        <!-- ESTRATEGA -->
+        <article
+          class="plan reveal"
+          data-tier="jugador"
+          data-plan="Estratega"
+        >
+          <div class="tier-row"><span class="tier-dot"></span><span class="tier-name">Estratega</span></div>
+          <h3>Para las partidas épicas</h3>
+          <div class="price"><span class="num">$120.000</span><span class="per">/mes</span></div>
+          <p class="desc">Un juego pesado, tuyo por 45 días, sin afán</p>
+          <ul class="feats">
+            <li>45 días para aprender, dominar y disfrutarlo de verdad</li>
+            <li>Juegos que en tienda cuestan 3 veces la suscripción — tuyos sin comprarlos</li>
+            <li class="games"><span>Ark Nova, Brass Birmingham, Terraforming Mars…</span></li>
+            <li>Entrega y retiro a domicilio</li>
+          </ul>
+          <a
+            class="btn btn--lime"
+            href="https://wa.me/57XXXXXXXXXX?text=Hola%20Blopy%2C%20quiero%20el%20plan%20Estratega"
+            target="_blank"
+            rel="noopener"
+          >Elegir Estratega</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     4 · CATÁLOGO DESTACADO
+     =================================================================== -->
+  <section id="catalogo">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Catálogo destacado</span>
+        <h2>Muchos juegos.<span class="lime"> Infinitas partidas</span>.</h2>
+        <p>Más de cien títulos modernos. Estos son seis para empezar.</p>
+      </div>
+      <div class="cat-grid">
+        <article
+          class="game reveal"
+          data-tier="social"
+        >
+          <div class="gtag">Social</div>
+          <h3>Exploding Kittens</h3>
+          <p>Saca un gatito y reza para que no explote.</p>
+        </article>
+        <article
+          class="game reveal"
+          data-tier="social"
+        >
+          <div class="gtag">Social</div>
+          <h3>Hombre Lobo</h3>
+          <p>Miente, acusa y sobrevive hasta el amanecer.</p>
+        </article>
+        <article
+          class="game reveal"
+          data-tier="explorador"
+        >
+          <div class="gtag">Explorador</div>
+          <h3>Wingspan</h3>
+          <p>Construye el mejor hábitat de aves. Adictivo.</p>
+        </article>
+        <article
+          class="game reveal"
+          data-tier="explorador"
+        >
+          <div class="gtag">Explorador</div>
+          <h3>Flamecraft</h3>
+          <p>Dragones artesanos en un pueblo de tiendas.</p>
+        </article>
+        <article
+          class="game reveal"
+          data-tier="jugador"
+        >
+          <div class="gtag">Estratega</div>
+          <h3>Ark Nova</h3>
+          <p>Diseña el zoológico más ambicioso del mundo.</p>
+        </article>
+        <article
+          class="game reveal"
+          data-tier="jugador"
+        >
+          <div class="gtag">Estratega</div>
+          <h3>Brass Birmingham</h3>
+          <p>Industria, canales y deudas en plena revolución.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     5 · POR QUÉ BLOPY
+     =================================================================== -->
+  <section id="porque">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Por qué Blopy</span>
+        <h2>Cero cajas <span class="grape">acumulando polvo</span>.</h2>
+      </div>
+      <div class="why-grid">
+        <div class="reason reveal">
+          <div class="mark"><span></span></div>
+          <div>
+            <h3>Sin compromisos eternos</h3>
+            <p>Pagas mes a mes. Te sales cuando quieras, sin letras chiquitas.</p>
+          </div>
+        </div>
+        <div class="reason reveal">
+          <div class="mark"><span></span></div>
+          <div>
+            <h3>Un catálogo que rota</h3>
+            <p>Siempre hay algo nuevo para probar. Tu mesa no se aburre.</p>
+          </div>
+        </div>
+        <div class="reason reveal">
+          <div class="mark"><span></span></div>
+          <div>
+            <h3>Entrega en tu puerta</h3>
+            <p>Llevamos y recogemos dentro de la zona. Tú solo juegas.</p>
+          </div>
+        </div>
+        <div class="reason reveal">
+          <div class="mark"><span></span></div>
+          <div>
+            <h3>¿No te gustó? Cámbialo</h3>
+            <p>El próximo mes pides otro. Sin culpa y sin gastar de más.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     6 · ZONA DE COBERTURA
+     =================================================================== -->
+  <section id="zona">
+    <div class="wrap">
+      <div class="zone reveal">
+        <div>
+          <span class="eyebrow">Zona de cobertura</span>
+          <h2>Si juegas por acá, llegamos.</h2>
+          <p>Operamos en el occidente de Medellín y zonas cercanas. ¿No estás seguro si te cubrimos? Escríbenos y te
+            confirmamos al toque.</p>
+        </div>
+        <div class="barrios">
+          <span class="barrio">Calasanz</span>
+          <span class="barrio">Laureles</span>
+          <span class="barrio">La América</span>
+          <span class="barrio">Conquistadores</span>
+          <span class="barrio">San Joaquín</span>
+          <span class="barrio more">+ zonas cercanas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     7 · FAQ
+     =================================================================== -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Lo que todos preguntan.</h2>
+      </div>
+      <div class="faq-list reveal">
+        <div class="faq-item">
+          <button
+            class="faq-q"
+            type="button"
+          >¿Qué pasa si se daña una pieza?<span class="ico"></span></button>
+          <div class="faq-a">
+            <p>Tranquilo, el desgaste normal de jugar va por nuestra cuenta. Si se pierde o se rompe algo grave,depende
+              de qué pasó. No es lo mismo perder un dado que llegar con el juego en dos. Para no llevarse sorpresas, acá
+              están los Términos y Condiciones donde explicamos cómo manejamos cada caso.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button
+            class="faq-q"
+            type="button"
+          >¿Puedo cambiar de plan?<span class="ico"></span></button>
+          <div class="faq-a">
+            <p>Cuando quieras. Subes a Estratega el mes que te antoje un pesado, o bajas a Social si solo quieres party.
+              El cambio aplica desde tu siguiente ciclo.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button
+            class="faq-q"
+            type="button"
+          >¿Cuánto demora la entrega?<span class="ico"></span></button>
+          <div class="faq-a">
+            <p>Dentro de la zona de cobertura, normalmente al siguiente día. Coordinamos por WhatsApp la hora
+              que mejor te sirva para entregar y retirar.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button
+            class="faq-q"
+            type="button"
+          >¿Puedo pedir recomendaciones?<span class="ico"></span></button>
+          <div class="faq-a">
+            <p>Obvio, para eso estamos. Cuéntanos quiénes juegan, cuánto tiempo tienen y qué les gusta, y te armamos una
+              lista a la medida. Somos jugadores, no vendedores.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     8 · CTA FINAL
+     =================================================================== -->
+  <section id="cta">
+    <div class="wrap">
+      <div class="final-card reveal">
+        <span class="eyebrow">Empieza hoy</span>
+        <h2>¿Fin de semana sin planes?<br>Nosotros llevamos los <span class="hot">juegos</span>.</h2>
+        <p>Escríbenos por WhatsApp, elige tu plan y ten tu primera tanda de juegos esta misma semana.</p>
+        <a
+          class="btn btn--hot"
+          href="https://wa.me/57XXXXXXXXXX?text=Hola%20Blopy%2C%20quiero%20suscribirme"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg
+            class="wa"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M.06 24l1.68-6.13A11.86 11.86 0 0 1 .14 11.9C.14 5.33 5.48 0 12.05 0a11.82 11.82 0 0 1 8.4 3.49 11.82 11.82 0 0 1 3.48 8.42c0 6.57-5.34 11.91-11.91 11.91a11.9 11.9 0 0 1-5.7-1.45L.06 24zM6.6 20.13c1.68 1 3.28 1.6 5.44 1.6 5.46 0 9.9-4.43 9.9-9.9 0-5.47-4.44-9.9-9.9-9.9-5.47 0-9.9 4.43-9.9 9.9 0 2.27.66 3.97 1.77 5.75l-.99 3.62 3.68-.97zM17.5 14.6c-.07-.12-.27-.2-.56-.34-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.06 2.88 1.21 3.08.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42z"
+            />
+          </svg>
+          Escribinos por WhatsApp
+        </a>
+        <p class="fine">Sin permanencia · Cancelas cuando quieras</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+     FOOTER
+     =================================================================== -->
+  <footer class="site-footer">
+    <div class="wrap foot">
+      <a
+        class="brand"
+        href="#top"
+      ><span class="dot"></span>Blopy</a>
+      <ul class="links">
+        <li><a href="#como">Cómo funciona</a></li>
+        <li><a href="#planes">Planes</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#faq">Preguntas</a></li>
+      </ul>
+      <span class="meta">Juegos de mesa a domicilio · Medellín · 2026</span>
+    </div>
+  </footer>
+
+  <!-- ===================================================================
+     JAVASCRIPT — interacciones (vanilla, sin frameworks)
+     =================================================================== -->
+  <script>
+    (function () {
+      /* 1 · Borde del header al hacer scroll */
+      var header = document.getElementById('header');
+      var onScroll = function () { header.classList.toggle('is-stuck', window.scrollY > 8); };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      /* 2 · Selección de plan (estado visual al hacer clic en la tarjeta) */
+      var plans = document.querySelectorAll('.plan');
+      plans.forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('a')) return; /* no interferir con el CTA */
+          plans.forEach(function (p) { p.classList.remove('is-selected'); });
+          card.classList.add('is-selected');
+        });
+      });
+
+      /* 2.5 · Carrusel de cartas del hero (rotan para mostrar las tres) */
+      var stack = document.querySelector('.box-stack');
+      if (stack) {
+        var boxes = [].slice.call(stack.querySelectorAll('.box'));
+        var slots = ['pos-left', 'pos-right', 'pos-front']; /* orden inicial: grape, lime, hot al frente */
+        var off = 0, timer = null;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        stack.classList.add('js-carousel');
+        var render = function () {
+          boxes.forEach(function (b, i) {
+            b.classList.remove('pos-left', 'pos-right', 'pos-front');
+            b.classList.add(slots[(i + off) % 3]);
+          });
+        };
+        var start = function () { if (!timer && !reduce) timer = setInterval(function () { off = (off + 1) % 3; render(); }, 2800); };
+        var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
+        render();
+        start();
+        /* pausa al pasar el mouse para poder leer la carta del frente */
+        stack.addEventListener('mouseenter', stop);
+        stack.addEventListener('mouseleave', start);
+        /* clic en una carta = traerla al frente */
+        boxes.forEach(function (b, i) {
+          b.addEventListener('click', function () { off = (2 - i + 3 * 3) % 3; render(); });
+        });
+      }
+
+      /* 3 · Acordeón de FAQ */
+      var items = document.querySelectorAll('.faq-item');
+      items.forEach(function (item) {
+        var q = item.querySelector('.faq-q');
+        var a = item.querySelector('.faq-a');
+        q.addEventListener('click', function () {
+          var isOpen = item.classList.contains('open');
+          items.forEach(function (it) {
+            it.classList.remove('open');
+            it.querySelector('.faq-a').style.maxHeight = null;
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            a.style.maxHeight = a.scrollHeight + 'px';
+          }
+        });
+      });
+
+      /* 4 · Aparición al hacer scroll (IntersectionObserver) + red de seguridad */
+      var reveals = document.querySelectorAll('.reveal');
+      var revealAll = function () { reveals.forEach(function (el) { el.classList.add('in'); }); };
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+          });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(function (el) { io.observe(el); });
+        setTimeout(revealAll, 1400); /* si el observer no dispara, revelamos igual */
+      } else {
+        revealAll();
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
